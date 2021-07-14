@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Изменить ФЛ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <link rel="shortcut icon" href="../static/img/favicon.ico?v=2" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../">Carnot Systems</a>
+        </div>
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link" href="../source">Теплоисточники</a>
+            </li>
+            <li class="nav-item active dropdown">
+                <a class="nav-link dropdown-toggle" href="../person" id="navbardrop" data-toggle="dropdown">
+                    Контрагенты
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="../person">Физические лица</a>
+                    <a class="dropdown-item" href="#">Юридические лица</a>
+                    <a class="dropdown-item" href="#">Индивидуальные предприниматели</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../object">Схема теплоснабжения</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../network">Сводная и детализированная отчётость</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="../ref" id="navbardrop" data-toggle="dropdown">
+                    Справочники
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Вид топлива</a>
+                    <a class="dropdown-item" href="#">Сезонность котельной</a>
+                    <a class="dropdown-item" href="#">Температуры фактические</a>
+                    <a class="dropdown-item" href="#">Температуры СНиП</a>
+                    <a class="dropdown-item" href="#">Температурные графики</a>
+                </div>
+            </li>
+        </ul>
+        <div class="navbar-collapse collapse w-250 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../"> <i class="fa fa-user-circle" style="font-size:14px;color:grey"></i>
+                        {{.User.Name}} {{.User.FamilyName}}
+                        ("{{.User.Role.Name}}")</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../logout"> <i class="fa fa-child" style="font-size:14px;color:grey"></i>
+                        Выйти</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Стартовая страница</a></li>
+            <li class="breadcrumb-item"><a href="/person">Физические лица</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Редактирование физического лица ({{.Attribute.Name}}
+                {{.Attribute.FamilyName}})
+            </li>
+        </ol>
+    </nav>
+
+    <div class="jumbotron text-center">
+        <div class="row justify-content-center  h-400">
+            <!-- Button trigger modal -->
+            <div class="card text-center">
+                <div class="card-body">
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#ModalContacts">
+                        Контакты
+                    </button>
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                        data-target="#ModalDocuments">
+                        Документы
+                    </button>
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#ModalAccounts">
+                        Лицевые счета
+                    </button>
+
+                    <div>
+                        А здесь типа фотка:
+                    </div>
+
+                    <img src="../static/img/zoltan.jpg" class="mx-auto d-block">
+                </div>
+            </div>
+
+            <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                <form action="/person/update?key={{.Attribute.Key}}" class="needs-validation" novalidate method="POST">
+                    <div class="form-group">
+                        Фамилия:<input value={{.Attribute.FamilyName}} type="text" class="form-control"
+                            placeholder="Фамилия" name="familyname" required>
+                        <div class="invalid-feedback">Пожалуйста укажите фамилию</div>
+                    </div>
+                    <div class="form-group">
+                        Имя:<input value={{.Attribute.Name}} type="text" class="form-control" placeholder="Имя"
+                            name="name" required>
+                        <div class="invalid-feedback">Пожалуйста укажите имя</div>
+                    </div>
+                    <div class="form-group">
+                        Отчество:<input value={{.Attribute.PatronymicName}} type="text" class="form-control"
+                            placeholder="Отчество" name="patronymicname" required>
+                        <div class="invalid-feedback">Пожалуйста укажите отчество</div>
+                    </div>
+
+                    <div class="card-body">
+                        Пол:
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" {{ if eq .Attribute.Sex true}} checked {{ end}}
+                                name="sex" id="sex" value="true">
+                            <label class="form-check-label" for="sex">Мужской</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" {{ if eq .Attribute.Sex false}} checked {{ end}}
+                                type="radio" name="sex" id="sex" value="false">
+                            <label class="form-check-label" for="sex">Женский</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        Дата рождения:<input value={{.Attribute.DateBirth.Format "2006-01-02" }} type="date"
+                            class="form-control" placeholder="Дата рождения" name="datebirth" required>
+                        <div class="invalid-feedback">Пожалуйста укажите Дату рождения</div>
+                    </div>
+                    <div class="form-group">
+                        Дата смерти:<input value={{.Attribute.DateDeath.Format "2006-01-02" }} type="date"
+                            class="form-control" placeholder="Дата смерти" name="datedeath">
+                    </div>
+                    <div name="user" class="form-group" data-width='auto'>
+                        Выберите Пользователя:
+                        <select name="user" id="user" required class="selectpicker" data-live-search="true" title="Выбран
+                            {{.Attribute.User.Key}}" noneResultsText="Нет совпадений" data-size="10" width="auto">
+                            {{range .Attribute.PossibleUsers}}
+                            <option value={{.Key}}>{{.Name}} {{.FamilyName}} (Логин {{.Key}})
+
+                            </option>
+                            {{ end }}
+                        </select>
+                    </div>
+                    <a href="/person" class="btn btn-outline-danger">Отменить</a>
+                    <button type="submit" class="btn btn-outline-success">Применить</button>
+                </form>
+                {{ if eq .Error "Ошибка при создании Потребителя" }}
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ .Error}}</strong>
+                </div>
+                {{ end }}
+            </div>
+            <div class="card text-center">
+                Здесь будут дополнительные поля, а пока - Цири
+                <img src="../static/img/ciri.png" class="mx-auto d-block">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ModalContacts" tabindex="-1" role="dialog" aria-labelledby="contactModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contactModalLongTitle">Контакты Потребителя</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="contactTable" class="table">
+
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">ID Контакта</th>
+                                <th scope="col">Значение</th>
+                                <th scope="col">Тип контакта</th>
+                                <th scope="col">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .Attribute.Contacts}}
+                            <tr class=" = " onclick="location.href = '/person/contact/update?key={{ .Key }}'"
+                                style="cursor: pointer;">
+                                <td>{{ .Key }}</td>
+                                <td>{{ .Value }}</td>
+                                <td>{{ .Type.Name}}</td>
+                                <td><a href="/person/contact/delete?key={{ .Key }}" class="btn btn-outline-danger"
+                                        role="button">Удалить</a>
+                                </td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td>Отсутствуют контакты</td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ModalDocuments" tabindex="-1" role="dialog" aria-labelledby="documentModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contactModalLongTitle">Документы Потребителя</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Здесь будут документы
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Добавить</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ModalAccounts" tabindex="-1" role="dialog" aria-labelledby="accountModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contactModalLongTitle">Лицевые счета Потребителя</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Здесь будут Лицевые счета
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('select option[value="{{.Attribute.User.Key}}"]').attr("selected", true);
+        });
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+
+                var forms = document.getElementsByClassName('needs-validation');
+
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+</body>
+
+</html>

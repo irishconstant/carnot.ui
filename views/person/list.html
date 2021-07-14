@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Физические лица ({{.User.Key}})</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="shortcut icon" href="../static/img/favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../">Carnot Systems</a>
+        </div>
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link" href="../source">Теплоисточники</a>
+            </li>
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="../person" id="navbardrop" data-toggle="dropdown">
+                    Контрагенты
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="../person">Физические лица</a>
+                    <a class="dropdown-item" href="#">Юридические лица</a>
+                    <a class="dropdown-item" href="#">Индивидуальные предприниматели</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../object">Схема теплоснабжения</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../network">Сводная и детализированная отчётость</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="../ref" id="navbardrop" data-toggle="dropdown">
+                    Справочники
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Вид топлива</a>
+                    <a class="dropdown-item" href="#">Сезонность котельной</a>
+                    <a class="dropdown-item" href="#">Температуры фактические</a>
+                    <a class="dropdown-item" href="#">Температуры СНиП</a>
+                    <a class="dropdown-item" href="#">Температурные графики</a>
+                </div>
+            </li>
+        </ul>
+        <div class="navbar-collapse collapse w-250 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../"> <i class="fa fa-user-circle" style="font-size:14px;color:grey"></i>
+                        {{.User.Name}} {{.User.FamilyName}}
+                        ("{{.User.Role.Name}}")</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../logout"> <i class="fa fa-child" style="font-size:14px;color:grey"></i>
+                        Выйти</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+
+
+    <table id="myTable" class="table table-hover">
+        <thead class="thead-dark">
+            <tr onclick="location.href = '/person'" style="cursor: pointer;">
+                <th scope=" col">Фамилия</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Отчество</th>
+                <th scope="col">Дата рождения</th>
+                <th scope="col">Гражданство</th>
+                <th scope="col">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <div class="card text-left">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                            data-target="#ModalContacts">
+                            Отфильтровать
+                        </button>
+                        <a href="/person/create" class="btn btn-outline-success">Добавить</a>
+                    </div>
+                </div>
+            </tr>
+            <!-- Modal -->
+            <div class="modal fade" id="ModalContacts" tabindex="-1" role="dialog"
+                aria-labelledby="contactModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactModalLongTitle">Искать Потребителей</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/person" method="POST">
+                                <div class="form-group">
+                                    По фамилии:<input type="text" class="form-control" placeholder="Фамилия"
+                                        name="familyname">
+                                </div>
+                                <div class="form-group">
+                                    По имени:<input type="text" class="form-control" placeholder="Имя" name="name">
+                                </div>
+                                <div class="form-group">
+                                    По отчеству:<input type="text" class="form-control" placeholder="Отчество"
+                                        name="patrname">
+                                </div>
+                                <div class="card-body">
+                                    По полу:
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="sex" id="sex" value="true">
+                                        <label class="form-check-label" for="sexRadio">Мужской</label>
+                                        <input class="form-check-input" type="radio" name="sex" id="sex" value="false">
+                                        <label class="form-check-label" for="sexRadio">Женский</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-danger"
+                                        data-dismiss="modal">Закрыть</button>
+                                    <button type="submit" class="btn btn-outline-success">Применить</button>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {{range .Attribute.Persons}}
+            <tr class=" = " onclick="location.href = '/person/update?key={{ .Key }}'" style="cursor: pointer;">
+                <td>{{ .FamilyName }}</td>
+                <td>{{ .Name }}</td>
+                <td>{{ .PatronymicName }}</td>
+                <td>{{ .DateBirth.Format "2006-01-02"}}</td>
+                <td>{{ .Citizenship.Name}}</td>
+                <td><a href="/person/delete?key={{ .Key }}" class="btn btn-outline-danger" role="button">Удалить</a>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td>Отсутствуют потребители</td>
+            </tr>
+            {{ end }}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-success"> Всего пользователей: {{.Attribute.PersonCount}}</td>
+                <td>Страницы:
+                    {{range .Attribute.Pages}}
+
+                    {{if .PreviousPage}}
+                    <a href="{{.URL}}&page={{.Number}}" class="btn btn-outline-secondary">{{.Number}}</a>
+                    {{end}}
+
+                    {{if .NextPage}}
+                    <a href="{{.URL}}&page={{.Number}}" class="btn btn-outline-secondary">{{.Number}}</a>
+                    {{end}}
+
+                    {{if .CurrentPage}}
+                    <a href="{{.URL}}&page={{.Number}}" class="btn btn-outline-success">{{.Number}}</a>
+                    {{end}}
+
+                    {{if ne .NextPage true}}
+                    {{if ne .PreviousPage true}}
+                    {{if .FirstPage}}
+                    <a href="{{.URL}}&page={{.Number}}" class="btn btn-outline-primary">{{.Number}}</a>...
+                    {{end}}
+                    {{if .LastPage}}
+                    ...<a href="{{.URL}}&page={{.Number}}" class="btn btn-outline-primary">{{.Number}}</a>
+                    {{end}}
+                    {{end}}
+                    {{end}}
+
+                    {{else}}
+                    Нет деления на страницы
+                    {{end}}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</body>
+
+</html>
