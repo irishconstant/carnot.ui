@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -44,6 +45,8 @@ func (h *DecoratedHandler) personCreate(w http.ResponseWriter, r *http.Request) 
 			Sex:            sex,
 			User:           *User,
 		}
+
+		fmt.Println(newPerson)
 
 		err = h.connection.CreatePerson(&newPerson)
 
